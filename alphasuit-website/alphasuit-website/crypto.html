@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crypto scanner — Alphasuit</title>
+<meta name="description" content="Live chart-pattern scanner for crypto.">
+<meta name="theme-color" content="#07090f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8c46a'/><text x='16' y='23' font-size='20' font-weight='800' text-anchor='middle' fill='%231a1405' font-family='Arial'>α</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=1">
+</head>
+<body data-market="crypto">
+<div id="site-header"></div>
+<div id="demo-banner"></div>
+<noscript><div class="noscript">Please turn on JavaScript to use Alphasuit.</div></noscript>
+<main>
+<div class="wrap">
+  <div class="page-head">
+    <div><h1>Crypto</h1><p class="muted" style="margin:6px 0 0"><span class="live-dot"></span><span id="updated">Loading…</span></p></div>
+    <div class="tabs"><a href="stocks.html" class="">Stocks</a><a href="crypto.html" class="on">Crypto</a></div>
+  </div>
+  <div class="chips-row" id="patChips"></div>
+  <div class="filters">
+    <input id="q" placeholder="Search symbol…" autocomplete="off">
+    <div class="seg" id="dirSeg"><button class="on" data-v="">All</button><button data-v="bullish">Bullish</button><button data-v="bearish">Bearish</button></div>
+    <div class="seg" id="stSeg"><button class="on" data-v="">Any status</button><button data-v="forming">Forming</button><button data-v="breakout">Breakout</button></div>
+    <select id="extraFilter"></select>
+    <select id="minScore"><option value="0">Any score</option><option value="75">Score 75+</option><option value="85">Score 85+</option></select>
+    <span class="muted" id="count" style="margin-left:auto;font-size:.85rem"></span>
+  </div>
+  <div class="tbl-wrap"><table id="tbl"><thead id="thead"></thead><tbody id="rows"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody></table></div>
+  <p class="dim" style="font-size:.78rem;margin:14px 0 40px">Setups are detected on closed candles. Pattern detection is for education, not advice. Crypto is highly volatile — never risk money you can't afford to lose.</p>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/patterns-data.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/scanner.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "date": "2026-11-17",
+    "kind": "update",
+    "title": "Welcome to the Alphasuit feed",
+    "body": "This is a sample post. Replace it with your own market updates — see the README (\"Post to the feed\"). Delete this post when you publish your first real one.",
+    "pinned": false
+  }
+]

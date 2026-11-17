@@ -2,11 +2,12 @@ name: Nightly scan and publish
 
 on:
   schedule:
-    - cron: "30 16 * * *"        # 16:30 UTC = 22:00 IST, every night
-  workflow_dispatch:              # lets you press "Run workflow" yourself
-  push:                           # when you edit the feed or the pages, just re-publish (no scan)
+    - cron: "30 16 * * *"   # 16:30 UTC = 22:00 IST, every night
+  workflow_dispatch:         # lets you press "Run workflow" yourself
+  push:
     branches: [main]
-paths-ignore: ["*/scanner/", ".github/", "*/README.md"]
+    paths-ignore: ["*/scanner/", ".github/", "*/README.md"]
+
 permissions:
   contents: write
 
@@ -24,19 +25,19 @@ jobs:
         with:
           path: repo
 
-      - name: Find your website folder (works even if the files were uploaded inside another folder)
+      - name: Find your website folder
         run: |
-          GEN=$(find repo -name generate.py -path 'scanner' | head -1)
+          GEN=$(find repo -type f -name generate.py -path '*/scanner/generate.py' | head -1)
           if [ -z "$GEN" ]; then
-            echo "Could not find scanner/generate.py - the 'scanner' folder was not uploaded to GitHub."
+            echo "Could not find scanner/generate.py in the repository."
             exit 1
           fi
           SITE=$(dirname "$(dirname "$GEN")")
           echo "Website folder found at: $SITE"
-          mkdir src
+          mkdir -p src
           cp -a "$SITE"/. src/
 
-      - name: Get the last published data (so a feed edit never loses scan results)
+      - name: Get the last published data
         run: |
           if git clone --depth 1 --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" pages 2>/dev/null; then
             rm -rf pages/.git
@@ -76,8 +77,10 @@ jobs:
         run: |
           (cd src && tar cf - --exclude=./.git --exclude=./.github --exclude=./scanner --exclude=./data --exclude=./README.md .) | (cd pages && tar xf -)
           mkdir -p pages/data/charts
-          cp src/data/feed.json pages/data/feed.json
-          for f in stocks crypto; do [ -f pages/data/$f.json ] || cp src/data/$f.json pages/data/$f.json; done
+          [ -f src/data/feed.json ] && cp src/data/feed.json pages/data/feed.json
+          for f in stocks crypto; do
+            [ -f pages/data/$f.json ] || { [ -f src/data/$f.json ] && cp src/data/$f.json pages/data/$f.json; }
+          done
           cp -n src/data/charts/*.json pages/data/charts/ 2>/dev/null || true
           touch pages/.nojekyll
 
@@ -92,8 +95,8 @@ jobs:
           git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -f origin gh-pages
 
-      - name: Mark the run red if the scan failed (old results stay online)
+      - name: Mark the run red if the scan failed
         if: steps.scan.outcome == 'failure'
         run: |
-          echo "The scan failed - yesterday's results are still shown. Open the 'Run the scan' step above to see why."
+          echo "The scan failed - yesterday's results are still shown. Open the 'Run the scan' step to see why."
           exit 1

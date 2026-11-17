@@ -6,8 +6,7 @@ on:
   workflow_dispatch:              # lets you press "Run workflow" yourself
   push:                           # when you edit the feed or the pages, just re-publish (no scan)
     branches: [main]
-    paths-ignore: ["scanner/*", ".github/*", "README.md"]
-
+paths-ignore: ["*/scanner/", ".github/", "*/README.md"]
 permissions:
   contents: write
 

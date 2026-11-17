@@ -1,0 +1,100 @@
+name: Nightly scan and publish
+
+on:
+  schedule:
+    - cron: "30 16 * * *"        # 16:30 UTC = 22:00 IST, every night
+  workflow_dispatch:              # lets you press "Run workflow" yourself
+  push:                           # when you edit the feed or the pages, just re-publish (no scan)
+    branches: [main]
+    paths-ignore: ["scanner/*", ".github/*", "README.md"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Get your repository
+        uses: actions/checkout@v4
+        with:
+          path: repo
+
+      - name: Find your website folder (works even if the files were uploaded inside another folder)
+        run: |
+          GEN=$(find repo -name generate.py -path 'scanner' | head -1)
+          if [ -z "$GEN" ]; then
+            echo "Could not find scanner/generate.py - the 'scanner' folder was not uploaded to GitHub."
+            exit 1
+          fi
+          SITE=$(dirname "$(dirname "$GEN")")
+          echo "Website folder found at: $SITE"
+          mkdir src
+          cp -a "$SITE"/. src/
+
+      - name: Get the last published data (so a feed edit never loses scan results)
+        run: |
+          if git clone --depth 1 --branch gh-pages "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" pages 2>/dev/null; then
+            rm -rf pages/.git
+          else
+            mkdir -p pages
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: src/scanner/requirements.txt
+
+      - name: Install scanner requirements
+        run: pip install -r src/scanner/requirements.txt
+
+      - name: Remember downloaded NSE files between nights
+        uses: actions/cache@v4
+        with:
+          path: scanner_cache
+          key: scan-cache-${{ github.run_id }}
+          restore-keys: scan-cache-
+
+      - name: Run the scan
+        id: scan
+        if: github.event_name != 'push'
+        continue-on-error: true
+        env:
+          DATA_DIR: ${{ github.workspace }}/scanner_cache
+          SHEETS_CSV_URLS: ${{ secrets.SHEETS_CSV_URLS }}
+          MIN_SCORE: "70"
+          NSE_UNIVERSE: "all"
+          SHOW_LEVELS: "0"
+        run: python src/scanner/generate.py all --site pages
+
+      - name: Put the website together
+        run: |
+          (cd src && tar cf - --exclude=./.git --exclude=./.github --exclude=./scanner --exclude=./data --exclude=./README.md .) | (cd pages && tar xf -)
+          mkdir -p pages/data/charts
+          cp src/data/feed.json pages/data/feed.json
+          for f in stocks crypto; do [ -f pages/data/$f.json ] || cp src/data/$f.json pages/data/$f.json; done
+          cp -n src/data/charts/*.json pages/data/charts/ 2>/dev/null || true
+          touch pages/.nojekyll
+
+      - name: Publish
+        run: |
+          cd pages
+          git init -q -b gh-pages
+          git config user.name "alphasuit-bot"
+          git config user.email "alphasuit-bot@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Publish $(date -u +%F' '%H:%M) UTC"
+          git remote add origin "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -f origin gh-pages
+
+      - name: Mark the run red if the scan failed (old results stay online)
+        if: steps.scan.outcome == 'failure'
+        run: |
+          echo "The scan failed - yesterday's results are still shown. Open the 'Run the scan' step above to see why."
+          exit 1

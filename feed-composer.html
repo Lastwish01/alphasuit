@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Feed post helper — Alphasuit</title>
+<meta name="description" content="Owner helper page">
+<meta name="theme-color" content="#07090f">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8c46a'/><text x='16' y='23' font-size='20' font-weight='800' text-anchor='middle' fill='%231a1405' font-family='Arial'>α</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=1">
+</head>
+<body>
+<div id="site-header"></div>
+<div id="demo-banner"></div>
+<noscript><div class="noscript">Please turn on JavaScript to use Alphasuit.</div></noscript>
+<main>
+<div class="wrap" style="max-width:760px;padding:34px 20px 60px">
+  <h1 style="font-size:1.8rem">Feed post helper</h1>
+  <p>Fill this in, press <b>Make post text</b>, copy the result and paste it into <code>data/feed.json</code> on GitHub (see the README, step "Post to the feed"). This page only prepares text on your own device — nothing is posted from here.</p>
+  <div class="card">
+    <div class="field"><label>Type</label><select id="kind"><option value="update">Market update</option><option value="plan">Trade plan</option></select></div>
+    <div class="field"><label>Title</label><input id="title" maxlength="160" placeholder="e.g. Nifty holds 24,000 — what to watch tomorrow"></div>
+    <div class="field"><label>Text (links become clickable, **bold** works)</label><textarea id="body"></textarea></div>
+    <div class="grid g2" style="gap:14px">
+      <div class="field"><label>Symbol (optional)</label><input id="symbol" placeholder="RELIANCE"></div>
+      <div class="field"><label>Direction (trade plans)</label><select id="direction"><option value="">—</option><option value="bullish">Bullish</option><option value="bearish">Bearish</option></select></div>
+      <div class="field"><label>Entry</label><input id="entry"></div><div class="field"><label>Stop-loss</label><input id="stop"></div><div class="field"><label>Target</label><input id="target"></div>
+    </div>
+    <div class="checks"><label><input type="checkbox" id="pinned"> Pin to top</label></div>
+    <button class="btn gold" id="make">Make post text</button>
+  </div>
+  <div class="field" style="margin-top:18px"><label>Result — copy this</label><textarea id="out" style="min-height:200px;font-family:var(--mono);font-size:.82rem"></textarea></div>
+  <button class="btn" id="copy">Copy</button>
+  <p class="dim" style="font-size:.82rem;margin-top:16px">Publishing specific entry / stop / target levels may count as investment advice under SEBI rules. Market commentary is much lower risk — check with a compliance professional before sharing trade plans.</p>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/patterns-data.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/composer.js"></script>
+</body>
+</html>

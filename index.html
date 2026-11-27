@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alphasuit — Free chart-pattern scanner for NSE, BSE & Crypto</title>
+<meta name="description" content="Alphasuit scans NSE/BSE stocks and crypto every night for VCP, cup & handle, head & shoulders, double tops/bottoms, triangles, flags and more.">
+<meta name="theme-color" content="#07090f">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23e8c46a'/><text x='16' y='23' font-size='20' font-weight='800' text-anchor='middle' fill='%231a1405' font-family='Arial'>α</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=1">
+</head>
+<body>
+<div id="site-header"></div>
+<div id="demo-banner"></div>
+<noscript><div class="noscript">Please turn on JavaScript to use Alphasuit.</div></noscript>
+<main>
+<section class="hero"><div class="wrap">
+  <span class="eyebrow"><span class="live-dot"></span>Scanned automatically every night</span>
+  <h1>Find the setup<br><span>before the breakout.</span></h1>
+  <p class="lead">Alphasuit scans every NSE &amp; BSE stock and the top crypto pairs for VCP, cup &amp; handle, head &amp; shoulders, triangles, flags and more — fresh results ready every morning. Free for everyone.</p>
+  <div class="cta"><a class="btn gold lg" href="stocks.html">Open stock scanner</a><a class="btn lg" href="crypto.html">Open crypto scanner</a></div>
+  <div class="statbar">
+    <div><b id="nStocks">–</b><span>live stock setups</span></div>
+    <div><b id="nScanned">–</b><span>stocks scanned last run</span></div>
+    <div><b id="nCrypto">–</b><span>live crypto setups</span></div>
+    <div><b>16</b><span>pattern detectors</span></div>
+  </div>
+  <p class="dim" id="updatedLine" style="margin-top:14px;font-size:.82rem">&nbsp;</p>
+</div></section>
+
+<section id="feed-section" style="padding-bottom:0"><div class="wrap">
+  <div class="sec-head" style="margin-bottom:24px"><span class="eyebrow">Latest from Alphasuit</span><h2>Market feed</h2></div>
+  <div id="feed" data-limit="3" data-compact="1" style="max-width:760px;margin:0 auto;display:grid;gap:14px"></div>
+  <p class="center" style="margin-top:18px"><a class="gold" href="feed.html">See all posts →</a></p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">Pattern library</span><h2>Ten classic patterns. Six more that work.</h2>
+    <p>Every detector is rule-based and volatility-adjusted, so a "pole" or "cup" has to be bigger than the stock's normal noise.</p></div>
+  <div class="grid g4" id="coreTiles"></div>
+  <div class="grid g3" id="extraTiles" style="margin-top:18px;grid-template-columns:repeat(6,1fr)"></div>
+</div></section>
+
+<section style="background:var(--bg2);border-block:1px solid var(--line)"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow">How it works</span><h2>From raw candles to a watch-list</h2></div>
+  <div class="grid g3">
+    <div class="card"><h3>1 · Scan</h3><p>Every trading night, after the close, we scan the day's closed candles for all NSE/BSE stocks. Crypto is scanned every night too.</p></div>
+    <div class="card"><h3>2 · Qualify</h3><p>Illiquid and suspended stocks are filtered out. Each pattern is scored 0–100 on geometry, volume and trend context.</p></div>
+    <div class="card"><h3>3 · Study</h3><p>Open the chart with the detected pattern lines drawn in, see its status (forming or breakout) and score, and study how it develops.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap faq" style="max-width:760px">
+  <div class="sec-head"><h2>Questions</h2></div>
+  <details><summary>Is it really free?</summary><p>Yes. All scanners, patterns and charts are free for everyone, with no account needed.</p></details>
+  <details><summary>Is this investment advice?</summary><p>No. Alphasuit is an educational screening tool that highlights chart structures. Always do your own analysis.</p></details>
+  <details><summary>When is data updated?</summary><p>Indian stocks and crypto are scanned once every night (about 10 PM IST), so fresh results are ready before the market opens. The scanner page always shows the time of the last scan.</p></details>
+</div></section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/patterns-data.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/home.js"></script>
+<script src="assets/js/feed.js"></script>
+</body>
+</html>
